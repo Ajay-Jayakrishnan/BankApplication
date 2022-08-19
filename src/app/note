@@ -1,0 +1,20 @@
+3 . Two way n=Binding
+ 3.2.1 : FormsModule - Import in AppModule
+ ngModel - syntax : [(ngModel)] = "variable name"
+ when ngModel is in form name attribute should be given
+
+*********** Path setup for components*********
+
+ . page paths are addend in app routing.module.ts
+ . to view pages that user wants change selector in
+use 
+       name
+ . Dependency injection
+          - occurs inside constructor  of a class
+ . 
+
+
+
+ services    
+services are used for API calls
+ng submit==================================== event to submt form
