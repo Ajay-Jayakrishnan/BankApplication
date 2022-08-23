@@ -17,7 +17,8 @@ const routes: Routes = [
   //register
   {
     path:'register',component:RegisterComponent
-  }
+  },
+  {path:'dash',component:DashBoardComponent}
  
 ];
 

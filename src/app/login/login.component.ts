@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DashBoardComponent } from '../dash-board/dash-board.component';
+import { DataService } from '../services/data.service';
 
 @Component({
   selector: 'app-login',
@@ -12,79 +14,47 @@ export class LoginComponent implements OnInit {
   welcome ="Your Banking Starts Here.."
   // <!-- attribute Binding -->
   placeHol =" Please enter account number"
-   pswd = ""
-   acno = ""
-  dataBase :any = {
-    1000:{acno:1000,name:"ajay",password:1000,balance:2000},
-    1001:{acno:1001,name:"basil",password:1001,balance:4000},
-    1002:{acno:1002,name:"christo",password:1002,balance:4000}
-  }
-  ServiceService: any;
+   pswd =''
+   acno =''
+  
 
-  constructor(private router:Router , ) { }
+ 
+    loginForm = this.formBuilder.group(
+      {
+       
+        acno :['',[Validators.required,Validators.pattern('[0-9]*')]],
+        
+        
+        pswd:['',[Validators.required,Validators.pattern('[a-zA-Z 0-9]*')]],
+      }
+    )
+  
+  
+
+  constructor(private router:Router , private dataService:DataService,private formBuilder:FormBuilder ) { }
 
   ngOnInit(): void {
   }
-  //user defined functions should be here
-//   login(){
-    
-//     var acno = this.acno
-//     var pass = this.pswd
-//     var userData = this.dataBase
-//     if( acno in userData){
-//       if(pass == userData[acno]['password']){
-//         alert("login successful")
-//       }
-//       else{
-//         alert("wrong Password")
-//       }
-//     }
-//     else{
-//       alert("User doesnt exist")
-//     }
-//   }
-//    acnoin(event:any) {
-//     this.pswd = event.target.value
+
+  login(){
+      var acno = this.loginForm.value.acno
+    var pswd = this.loginForm.value.pswd
+
    
     
-//   }
-// passin(event:any){
-//   this.acno  =  event.target.value
-// }
-// }
-  
-// }
-// temaplate reference method..................................
-// login(a:any,p:any){
+    const result = this.dataService.login(acno,pswd)
+    if(this.loginForm.valid){
+    if(result){
+      alert("login Successful")
+      this.router.navigateByUrl('dash')
+    }
     
-//   var acno = a.value
-//   var pass = p.value
-//   let userData = this.dataBase
-//   if( acno in userData){
-//     if(pass == userData[acno]['password']){
-//       alert("login successful")
-//     }
-//     else{
-//       alert("wrong Password")
-//     }
-//   }
-//   else{
-//     alert("User doesnt exist")
-//   }
-// }
-// }
-  login(){
     
-    var acno = this.acno
-    var pass = this.pswd
-    var userData = this.dataBase
-  const result = this.ServiceService.login(acno,pass)
-  if(result){
-    alert("login successful")
-    this.router.navigateByUrl('dashBoard')
   }
+  else{
+    alert("invalid input")
   }
  
 }
-
+}
   

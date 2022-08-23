@@ -18,3 +18,18 @@ use
  services    
 services are used for API calls
 ng submit==================================== event to submt form
+ 
+
+
+ angular Forms
+    1. template driven forms
+    2. Model driven forms :esy to give validation commands
+          eg. ReactiveForms  - import ReactiveFormsModule
+
+
+Angular Directives=------------for Dom Manipulation
+   1. Component Directive
+   2. Structural Directive   - prefix *
+        use *ngif
+
+
