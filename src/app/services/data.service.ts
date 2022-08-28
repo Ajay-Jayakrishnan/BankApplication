@@ -13,7 +13,9 @@ export class DataService {
 //display name of user on login
 currentUser :any;
 
-  constructor() { this.getDetails()}
+  constructor() {
+     this.getDetails()
+    }
   //save to local storage
   saveDetails(){
     localStorage.setItem('database' , JSON.stringify(this.dataBase))
@@ -22,11 +24,11 @@ currentUser :any;
       localStorage.setItem('currentUser',JSON.stringify(this.currentUser))
     }
   }
-  //get from locat storage
-  getDetails(){
+  //get from local storage
+  getDetails(): void{
     this.dataBase = JSON.parse(localStorage.getItem('database')||'')
 
-    
+    this.currentUser=JSON.parse(localStorage.getItem('currentUser') || '')
   }
 
   //register function

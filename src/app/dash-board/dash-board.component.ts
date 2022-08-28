@@ -33,6 +33,7 @@ export class DashBoardComponent implements OnInit {
 constructor(private formBuilder:FormBuilder , private dataservice :DataService) { }
 
   ngOnInit(): void {
+    
     this.user = this.dataservice.currentUser
   }
  
