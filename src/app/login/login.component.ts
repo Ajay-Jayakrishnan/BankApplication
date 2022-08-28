@@ -45,7 +45,7 @@ export class LoginComponent implements OnInit {
     const result = this.dataService.login(acno,pswd)
     if(this.loginForm.valid){
     if(result){
-      alert("login Successful")
+      alert("login Successfull")
       this.router.navigateByUrl('dash')
     }
     

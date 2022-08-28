@@ -10,15 +10,23 @@ export class DataService {
     1001:{acno:1001,name:"basil",password:1001,balance:4000},
     1002:{acno:1002,name:"christo",password:1002,balance:4000}
   }
+//display name of user on login
+currentUser :any;
 
   constructor() { this.getDetails()}
   //save to local storage
   saveDetails(){
     localStorage.setItem('database' , JSON.stringify(this.dataBase))
+    if(this.currentUser){
+
+      localStorage.setItem('currentUser',JSON.stringify(this.currentUser))
+    }
   }
   //get from locat storage
   getDetails(){
     this.dataBase = JSON.parse(localStorage.getItem('database')||'')
+
+    
   }
 
   //register function
@@ -47,6 +55,8 @@ export class DataService {
     let userDetails = this.dataBase
     if(acno in userDetails){
       if(pswd == userDetails[acno]['password']){
+        this.currentUser = userDetails[acno]['name']
+        this.saveDetails();
         return true
       }
       else{
@@ -60,4 +70,59 @@ export class DataService {
     }
     
   }
+  deposit(acno:any,pswd:any,amt:any){
+
+    
+    let userDetails = this.dataBase
+    const amount =parseInt(amt)
+    if(acno in userDetails){
+
+      if(pswd == userDetails[acno]["password"]){
+        userDetails[acno]['balance'] += amount;
+        this.saveDetails();
+        return   userDetails[acno]['balance'];
+
+
+      }
+      else{
+        alert("wrong password")
+        return false;
+      }
+    }
+    else{
+      alert("user doesnt exist")
+      return false;
+    }
+  }
+  withdraw(acno:any,pswd:any,amt:any){
+
+    
+    let userDetails = this.dataBase
+    const amount =parseInt(amt)
+    if(acno in userDetails){
+
+      if(pswd == userDetails[acno]["password"]){
+      
+      if(userDetails[acno]['balance']>amount)
+       { userDetails[acno]['balance'] -= amount;
+        this.saveDetails();
+        return   userDetails[acno]['balance'];
+      
+      
+      }
+      else{
+        alert("insufficient balance")
+      }
+    }
+      else{
+        alert("wrong password")
+        return false;
+      }
+    }
+    else{
+      alert("user doesnt exist")
+      return false;
+    }
+  }
 }
+
