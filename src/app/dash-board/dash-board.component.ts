@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder,Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { DeleteconfirmComponent } from '../deleteconfirm/deleteconfirm.component';
 import { DataService } from '../services/data.service';
 
 @Component({
@@ -10,7 +12,7 @@ import { DataService } from '../services/data.service';
 export class DashBoardComponent implements OnInit {
 
   user:any
-
+  Acno:any
   depositForm = this.formBuilder.group(
  {
       amount:['',[Validators.required,Validators.pattern('[0-9]')]],
@@ -30,11 +32,19 @@ export class DashBoardComponent implements OnInit {
   )
 
 
-constructor(private formBuilder:FormBuilder , private dataservice :DataService) { }
+constructor(private formBuilder:FormBuilder , private dataservice :DataService,private router:Router,) { }
 
   ngOnInit(): void {
+
+    if (!localStorage.getItem('token'))  {
+      alert("please Login")
+      this.router.navigateByUrl('')
+    }
+    if(localStorage.getItem('currentUser')){
+      this.user = JSON.parse(localStorage.getItem('currentUser') || '')
+    }
+
     
-    this.user = this.dataservice.currentUser
   }
  
   withdraw(){
@@ -42,10 +52,13 @@ constructor(private formBuilder:FormBuilder , private dataservice :DataService) 
     var pswd = this.withdrawForm.value.pswd;
     var amount= this.withdrawForm.value.amount;
     const result = this.dataservice.withdraw(acno,pswd,amount)
-    if(result){
-      
-      alert(`${amount} withdraw successfull  : new balance is${ result}`)
-    }
+    this.dataservice.withdraw(acno,pswd,amount).subscribe((result:any)=>{
+      alert(result.message)
+     },
+     result=>{
+      alert(result.error.message)
+     }
+     )
   }
   deposit(){
     var acno = this.depositForm.value.acno;
@@ -55,12 +68,39 @@ constructor(private formBuilder:FormBuilder , private dataservice :DataService) 
   
   
   
-  const result = this.dataservice.deposit(acno,pswd,amount)
-    if(result){
-      
-      alert(`${amount} deposited successfully : new balance is${ result}`)
-    }
+this.dataservice.deposit(acno,pswd,amount).subscribe((result:any)=>{
+  alert(result.message)
+ },
+ result=>{
+  alert(result.error.message)
+ }
+ )
+}
+    
+  logout(){
+    localStorage.removeItem("currentUser")
+    localStorage.removeItem("currentAcno")
+    localStorage.removeItem("token")
+    this.router.navigateByUrl('')
   }
+
+  deleteAcc(){
+    this.Acno=JSON.parse(localStorage.getItem('currentAcno') || '')
+  }
+ cancel(){
+  this.Acno=''
+ }
+ yes(event:any){
+this.dataservice.deleteAcc(event).subscribe((result:any)=>{
+  alert(result.message)
+  this.logout()
+},
+result=>{
+  alert(result.error.message)
+}
+)
+ }
+  
 }
 
   

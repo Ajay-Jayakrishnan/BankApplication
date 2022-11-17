@@ -1,1 +1,21 @@
-<p>transaction works!</p>
+<h1 class="m-5 text-center">Transaction History</h1>
+<table style="margin-left: 700px;margin-right:900px;font: size 25px;" class="border text-white  ">
+<thead>
+    <tr>
+        <th>Type</th>
+        <th>Amount</th>
+    </tr>
+    
+</thead>
+<tbody>
+  <tr>
+    <th></th>
+    <th></th>
+  </tr>
+  <tr *ngFor="let tran of transactions">
+    <th>{{tran.type }} &nbsp;</th>
+    <th>{{tran.amount}}</th>
+  </tr>
+</tbody>
+</table>
+<a href="/dash" class="btn btn-primary">home</a>

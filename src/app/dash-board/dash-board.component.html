@@ -1,12 +1,13 @@
 
 <h1 class="text-white">Welcome {{user}}</h1>
 <a href="/transaction">Transaction history</a>
-<div class="row">
-    
-    <div class="col-6 p-5">
+<app-deleteconfirm (onCancel)="cancel()" (onaccept)="yes($event)" [item]="Acno"></app-deleteconfirm>
+<div [ngClass]="Acno?'c1':''" class="row p-2">
         
-        <form [formGroup]="depositForm"  action="" (ngSubmit)="deposit()" style="width: 70%;margin:auto ;margin-top: 15%;">
-            <h1 class="fs-2 text-warning " ><b>Deposit</b></h1>
+    <div class="col-6 p-2" >
+        
+        <form [formGroup]="depositForm"  action="" (ngSubmit)="deposit()" style="width: 70%;margin:auto ;">
+            <h1 class="fs-2 text-warning text-center" ><b>Deposit</b></h1>
 
            <div class="mt-3"><input formControlName = "acno" name="acno" type="password"  class="form-control" placeholder="account number"></div>
             <div class="mt-3"><input formControlName = "pswd" name="pswd" type="password"  class="form-control" placeholder="password"></div>
@@ -16,9 +17,9 @@
 
         </form>
     </div>
-    <div class="col-6 p-5">
-        <form [formGroup]="withdrawForm"  action="" (ngSubmit)="withdraw()" style="width: 70%;margin:auto;margin-top: 15%;">
-            <h1 class="fs-2 text-warning " ><b>Withdraw</b></h1>
+    <div class="col-6 p-2">
+        <form [formGroup]="withdrawForm"  action="" (ngSubmit)="withdraw()" style="width: 70%;margin:auto;">
+            <h1 class="fs-2 text-warning text-center" ><b>Withdraw</b></h1>
 
        
           
@@ -30,4 +31,5 @@
         </form>
     </div>
 
-    <div class="text-center mt-4"><a routerLink=""><button class="btn btn-danger">LogOut</button></a></div>
+    <div class="text-center mt-4"><a routerLink=""><button (click)="logout()" class="btn btn-warning">LogOut</button></a></div>
+    <div ><button (click)="deleteAcc()" class="float-end me-2  btn btn-danger">Delete Account</button></div>

@@ -1,4 +1,8 @@
+import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+const options = {
+  headers : new HttpHeaders
+}
 
 @Injectable({
   providedIn: 'root'
@@ -6,15 +10,19 @@ import { Injectable } from '@angular/core';
 export class DataService {
   //database
   dataBase :any = {
-    1000:{acno:1000,name:"ajay",password:1000,balance:2000},
-    1001:{acno:1001,name:"basil",password:1001,balance:4000},
-    1002:{acno:1002,name:"christo",password:1002,balance:4000}
+    1000:{acno:1000,name:"ajay",password:1000,balance:2000,transaction:[],},
+    1001:{acno:1001,name:"basil",password:1001,balance:4000},transaction:[],
+    1002:{acno:1002,name:"christo",password:1002,balance:4000,transaction:[]}
   }
 //display name of user on login
 currentUser :any;
+//for transaction history of logged user
+currentAcno:any;
+//injecting http client module dependency to process http requests
 
-  constructor() {
-     this.getDetails()
+  constructor( private http:HttpClient) {
+  
+    
     }
   //save to local storage
   saveDetails(){
@@ -23,108 +31,84 @@ currentUser :any;
 
       localStorage.setItem('currentUser',JSON.stringify(this.currentUser))
     }
+    if(this.currentAcno){
+      localStorage.setItem('currentAcno',JSON.stringify(this.currentAcno))
+    }
   }
   //get from local storage
   getDetails(): void{
-    this.dataBase = JSON.parse(localStorage.getItem('database')||'')
-
-    this.currentUser=JSON.parse(localStorage.getItem('currentUser') || '')
+    if (localStorage.getItem('database')) {
+      this.dataBase = JSON.parse(localStorage.getItem('database')||'')
+    }
+    
+if(localStorage.getItem('currentUser')){
+  this.currentUser=JSON.parse(localStorage.getItem('currentUser') || '')
+}
+if(localStorage.getItem('currentAcno')){
+  this.currentAcno=JSON.parse(localStorage.getItem('currentAcno') || '')
+}
+   
+  
   }
 
   //register function
   register(usename:any,acno:any,password:any){
-        
-    let dataBase =this.dataBase
-    if(acno in dataBase){
-      return false
+    const body = {
+      usename,
+      acno,
+      password
     }
-    else{
-      dataBase[acno] = {
-        acno,
-        usename,
-        password,
-        balance : 0,
         
-      }
-      this.saveDetails()
-      return true
-    }
+   return this.http.post('http://localhost:3000/register',body)
   }
   //login function
   login(acno:any,pswd:any){
-   
-    
-    let userDetails = this.dataBase
-    if(acno in userDetails){
-      if(pswd == userDetails[acno]['password']){
-        this.currentUser = userDetails[acno]['name']
-        this.saveDetails();
-        return true
-      }
-      else{
-        alert("wrong Password")
-        return false
-      }
+    const body ={
+      acno,pswd
     }
-    else{
-      alert("User doesnt exist")
-      return false
-    }
-    
+    return this.http.post('http://localhost:3000/login',body)
   }
+     
+  
   deposit(acno:any,pswd:any,amt:any){
-
-    
-    let userDetails = this.dataBase
-    const amount =parseInt(amt)
-    if(acno in userDetails){
-
-      if(pswd == userDetails[acno]["password"]){
-        userDetails[acno]['balance'] += amount;
-        this.saveDetails();
-        return   userDetails[acno]['balance'];
-
-
-      }
-      else{
-        alert("wrong password")
-        return false;
-      }
+     
+   const body = {
+    acno,
+    pswd,amt
     }
-    else{
-      alert("user doesnt exist")
-      return false;
-    }
+    return this.http.post('http://localhost:3000/deposit',body,this.gettoken())
   }
-  withdraw(acno:any,pswd:any,amt:any){
-
+  //to get token
+ gettoken = () => {
+//taking token from loacal storage
+var token = JSON.parse(localStorage.getItem('token') || '') 
+//create a request header
+let headers = new HttpHeaders()
+headers = headers.append('x-headtoken',token)
+//function overloading
+options.headers = headers
+return options
+  }
     
-    let userDetails = this.dataBase
-    const amount =parseInt(amt)
-    if(acno in userDetails){
-
-      if(pswd == userDetails[acno]["password"]){
+    
+  
+  withdraw(acno:any,pswd:any,amt:any){
+     
+    const body = {
+     acno,
+     pswd,amt
+     }
+     return this.http.post('http://localhost:3000/withdraw',body,this.gettoken())
+   }
+  getTranscation(acno:any){
+    const body = {
+      acno
       
-      if(userDetails[acno]['balance']>amount)
-       { userDetails[acno]['balance'] -= amount;
-        this.saveDetails();
-        return   userDetails[acno]['balance'];
-      
-      
-      }
-      else{
-        alert("insufficient balance")
-      }
     }
-      else{
-        alert("wrong password")
-        return false;
-      }
-    }
-    else{
-      alert("user doesnt exist")
-      return false;
-    }
+  return this.http.post('http://localhost:3000/getTranscation',body)
+  }
+ deleteAcc(acno:any){
+  return this.http.delete('http://localhost:3000/deleteAcc/'+acno)
   }
 }
 

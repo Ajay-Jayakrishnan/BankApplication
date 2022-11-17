@@ -8,6 +8,8 @@ import { LoginComponent } from './login/login.component';
 import { DashBoardComponent } from './dash-board/dash-board.component';
 import { RegisterComponent } from './register/register.component';
 import { TransactionComponent } from './transaction/transaction.component';
+import { DeleteconfirmComponent } from './deleteconfirm/deleteconfirm.component';
+import {HttpClientModule} from '@angular/common/http';
 
 
 
@@ -19,6 +21,7 @@ import { TransactionComponent } from './transaction/transaction.component';
     DashBoardComponent,
     RegisterComponent,
     TransactionComponent,
+    DeleteconfirmComponent,
     
   ],
   imports: [
@@ -26,6 +29,7 @@ import { TransactionComponent } from './transaction/transaction.component';
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

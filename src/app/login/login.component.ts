@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { DashBoardComponent } from '../dash-board/dash-board.component';
 import { DataService } from '../services/data.service';
 
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -37,24 +38,26 @@ export class LoginComponent implements OnInit {
   }
 
   login(){
-      var acno = this.loginForm.value.acno
+    var acno = this.loginForm.value.acno
     var pswd = this.loginForm.value.pswd
 
    
     
-    const result = this.dataService.login(acno,pswd)
+  
     if(this.loginForm.valid){
-    if(result){
-      alert("login Successfull")
-      this.router.navigateByUrl('dash')
+      this.dataService.login(acno,pswd).subscribe((result:any)=>{
+        localStorage.setItem('currentUser',JSON.stringify(result.currentUser))
+        localStorage.setItem('currentAcno',JSON.stringify(result.currentAcno))
+        localStorage.setItem('token',JSON.stringify(result.token))
+        alert(result.message)
+        this.router.navigateByUrl('dash')
+      },
+      result=>{
+        alert(result.error.message)
+      }
+      )
     }
-    
-    
-  }
   else{
     alert("invalid input")
   }
- 
-}
-}
-  
+}}

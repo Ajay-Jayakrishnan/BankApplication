@@ -12,9 +12,7 @@ const routes: Routes = [
     path:'',component:LoginComponent
   },
   //dashBoard
-  {
-    path:'dashBoard',component:DashBoardComponent
-  },
+ 
   //register
   {
     path:'register',component:RegisterComponent

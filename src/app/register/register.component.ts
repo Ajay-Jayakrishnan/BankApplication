@@ -33,15 +33,22 @@ export class RegisterComponent implements OnInit {
   var  acno = this.registerForm.value. acno
   var uname = this.registerForm.value. uname
   var pswd = this.registerForm.value. pswd
-  const result = this.dataService.register(uname,acno,pswd)
+
   if(this.registerForm.valid){
-    if(result){
-      alert("Registered Successfully")
-      this.router.navigateByUrl('')
-    }
-    else{
-      alert("User already exist")
-    }
+
+    this.dataService.register(uname,acno,pswd).subscribe((result:any)=>{
+     
+        alert(result.message)
+        this.router.navigateByUrl('')
+      
+    
+     },
+     result => {
+       alert(result.error.message)
+     }
+    )
+    
+   
   }
   else{
     alert('invalid field')
